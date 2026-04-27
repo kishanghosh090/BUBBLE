@@ -25,4 +25,12 @@ export class AuthController {
 
     return res.status(200).json(new ApiResponse(200, null, modeMessage));
   });
+
+  static sendEmailOtp = asyncHandler(async (req: Request, res: Response) => {});
+
+  static verifyOtp = asyncHandler(async (req: Request, res: Response) => {});
+
+  static verifyEmailOtp = asyncHandler(
+    async (req: Request, res: Response) => {},
+  );
 }

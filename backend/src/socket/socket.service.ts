@@ -18,4 +18,22 @@ export class SocketService {
   ) {
     io.to(roomId).emit(event, data);
   }
+
+  static async sendTypingStatus(
+    io: Server,
+    userId: string,
+    roomId: string,
+    event: SocketEvents,
+  ) {
+    io.to(roomId).emit(event, { userId });
+  }
+
+  static async sendStopTypingStatus(
+    io: Server,
+    userId: string,
+    roomId: string,
+    event: SocketEvents,
+  ) {
+    io.to(roomId).emit(event, { userId });
+  }
 }

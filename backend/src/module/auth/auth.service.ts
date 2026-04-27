@@ -89,8 +89,9 @@ export class AuthService {
     }
   }
 
-  verifyOtp(phoneNumber: string, otp: string): string {
-    // Logic to verify the provided OTP for the given phone number
+  static async verifyOtp(phoneNumber: string, otp: string): Promise<string> {
     return `OTP verified successfully for ${phoneNumber}`;
   }
+
+  
 }

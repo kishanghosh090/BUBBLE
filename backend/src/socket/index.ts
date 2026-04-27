@@ -2,6 +2,7 @@ import type { Server } from "socket.io";
 import { socketAuthMiddleware } from "../middlewares/socket.middleware";
 import { SocketEvents } from "../constants/socket";
 import { ApiError } from "../utils/ApiError";
+import { SocketService } from "./socket.service";
 
 let ioInstance: Server;
 const initializeSocket = (io: Server) => {
@@ -16,30 +17,38 @@ const initializeSocket = (io: Server) => {
   io.on(SocketEvents.CONNECT, (socket) => {
     // register event listeners here
     socket.on(SocketEvents.JOIN_ROOM, (conversationId) => {
-      socket.join(conversationId);
-      console.log(`user joined room: ${conversationId}`);
+      SocketService.joinRoom(socket, conversationId);
     });
 
     socket.on(SocketEvents.LEAVE_ROOM, (conversationId) => {
-      socket.leave(conversationId);
-      console.log(`user left room: ${conversationId}`);
+      SocketService.leaveRoom(socket, conversationId);
     });
 
     socket.on(SocketEvents.MESSAGE, (data) => {
-      console.log("message received:", data);
-      // handle incoming message
+      SocketService.sendMessageToRoom(
+        io,
+        data.conversationId,
+        SocketEvents.MESSAGE,
+        data.message,
+      );
     });
 
     socket.on(SocketEvents.TYPING, (userID, conversationId) => {
-      socket
-        .to(conversationId)
-        .emit(SocketEvents.TYPING, { userId: socket.data.userId });
+      SocketService.sendTypingStatus(
+        io,
+        userID,
+        conversationId,
+        SocketEvents.TYPING,
+      );
     });
 
     socket.on(SocketEvents.STOP_TYPING, (userID, conversationId) => {
-      socket
-        .to(conversationId)
-        .emit(SocketEvents.STOP_TYPING, { userId: socket.data.userId });
+      SocketService.sendStopTypingStatus(
+        io,
+        userID,
+        conversationId,
+        SocketEvents.STOP_TYPING,
+      );
     });
 
     socket.on(SocketEvents.DISCONNECT, () => {
