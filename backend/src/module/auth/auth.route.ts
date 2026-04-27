@@ -23,7 +23,7 @@ router.post("/send-otp", (req: Request, res: Response, next: NextFunction) => {
 router.post("/verify-otp", (req, res) => {
   res.send("OTP verified successfully");
 });
-router.post("/auth/google", async (req: Request, res: Response) => {
+router.post("/google", async (req: Request, res: Response) => {
   const { idToken } = req.body as { idToken?: string };
   console.log(idToken);
 
