@@ -22,10 +22,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="xyz.kishanranaghosh.bubble" />
+                  <option name="mobileSdkAppId" value="1:372333789896:android:a4aa96ebca55c2fa4e5bfd" />
+                  <option name="projectId" value="drive-ed187" />
+                  <option name="projectNumber" value="372333789896" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

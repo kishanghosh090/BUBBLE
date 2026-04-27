@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,13 +21,15 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import kotlinx.coroutines.launch
 import xyz.kishanranaghosh.bubble.R
+import xyz.kishanranaghosh.bubble.core.SessionManager
 
 @Composable
-fun AuthScreen(vm: AuthViewModel = viewModel()) {
+fun AuthScreen(vm: AuthViewModel = viewModel(), session: SessionManager) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope ()
     val credentialManager = CredentialManager.create(context)
     val webClientId = context.getString(R.string.default_web_client_id)
+
 
     Column (
         modifier = Modifier.fillMaxSize(),
@@ -49,7 +53,7 @@ fun AuthScreen(vm: AuthViewModel = viewModel()) {
                             is CustomCredential -> {
                                 if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
                                     val google = GoogleIdTokenCredential.createFrom(credential.data)
-                                    vm.handleGoogleToken(google.idToken)
+                                    vm.handleGoogleToken(google.idToken,session)
                                 } else {
                                     vm.setError("Unexpected credential type returned by Google sign-in.")
                                 }
@@ -68,6 +72,6 @@ fun AuthScreen(vm: AuthViewModel = viewModel()) {
 
         if(vm.loading) Text("Loading...")
         vm.errorMessage?.let { Text(it) }
-        if(vm.success) Text("Login Success")
+        if(vm.success) Text(session.accessTokenFlow.collectAsState(null).value ?: "Logged in, but no access token found.")
     }
 }

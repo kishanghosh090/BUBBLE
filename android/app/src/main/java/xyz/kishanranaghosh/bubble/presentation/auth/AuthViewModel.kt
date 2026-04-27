@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import xyz.kishanranaghosh.bubble.core.SessionManager
 import xyz.kishanranaghosh.bubble.repository.AuthRepository
 
 class AuthViewModel : ViewModel() {
@@ -20,7 +21,11 @@ class AuthViewModel : ViewModel() {
         errorMessage = message
     }
 
-    fun handleGoogleToken(idToken: String) {
+
+
+
+
+    fun handleGoogleToken(idToken: String, session: SessionManager) {
         viewModelScope.launch {
             loading = true
             errorMessage = null
@@ -32,6 +37,7 @@ class AuthViewModel : ViewModel() {
                         "Received tokens: access=${res.data.accessToken}, refresh=${res.data.refreshToken}"
                     )
                     success = true
+                    session.saveTokens(res.data.accessToken, res.data.refreshToken)
                 } else {
                     success = false
                     errorMessage = res.message
